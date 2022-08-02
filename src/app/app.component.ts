@@ -7,4 +7,9 @@ import {Component} from '@angular/core';
 })
 export class AppComponent {
   title = 'signing-pad';
+  signatureImg?: string;
+
+  saveSignature(signature: string): void {
+    this.signatureImg = signature;
+  }
 }
