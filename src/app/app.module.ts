@@ -3,10 +3,12 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
+import {SigningPadComponent} from './signing-pad/signing-pad.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SigningPadComponent
   ],
   imports: [
     BrowserModule,
