@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 350px
+    }
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      font-weight: 600;
+      height: 35px;
+      border-radius: 3px;
+      border: none;
+    }
+
+    canvas {
+      border: 1px solid;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <canvas height="200" id="sign-pad" width="350"></canvas>
+  <button id="clear-button" onclick="clearSignature()">Clear</button>
+</div>
+
+<script type="text/javascript">
+  let isDrawing = false;
+  let context = undefined;
+  let canvas = undefined;
+
+  function initContext() {
+    canvas = document.getElementById('sign-pad');
+    context = canvas.getContext('2d');
+    context.strokeStyle = '#000';
+  }
+
+  function clearSignature() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.beginPath();
+  }
+
+  function initListeners() {
+    document.addEventListener("mouseup", () => {
+      isDrawing = false;
+    });
+    canvas.addEventListener('pointerdown', onMouseDown, {passive: true});
+    canvas.addEventListener('pointermove', onMouseMove, {passive: true});
+  }
+
+  function onMouseDown(e) {
+    isDrawing = true;
+    const coords = relativeCoords(e);
+    context.moveTo(coords.x, coords.y);
+  }
+
+  function onMouseMove(e) {
+    if (isDrawing) {
+      const coords = relativeCoords(e);
+      context.lineTo(coords.x, coords.y);
+      context.stroke();
+    }
+  }
+
+  function relativeCoords(event) {
+    const bounds = event.target.getBoundingClientRect();
+    const cords = {
+      clientX: event.clientX || event.changedTouches[0].clientX,
+      clientY: event.clientY || event.changedTouches[0].clientY
+    };
+    const x = cords.clientX - bounds.left;
+    const y = cords.clientY - bounds.top;
+    return {x, y};
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initContext();
+    initListeners();
+  });
+</script>
+
+</body>
+</html>
