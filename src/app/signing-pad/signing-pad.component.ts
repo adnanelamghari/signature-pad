@@ -46,19 +46,21 @@ export class SigningPadComponent {
     this.context.strokeStyle = '#000';
   }
 
-  @HostListener('document:mouseup', ['$event'])
-  onMouseUp(e: any): void {
-    this.isDrawing = false;
-  }
-
   onMouseDown(e: any): void {
+    // The mouse button is clicked, which means the start of drawing the signature
     this.isDrawing = true;
     const coords = this.relativeCoords(e);
     this.context.moveTo(coords.x, coords.y);
   }
 
+  @HostListener('document:mouseup', ['$event'])
+  onMouseUp(e: any): void {
+    // The mouse button is released, so this means the end of drawing the signature
+    this.isDrawing = false;
+  }
+
   onMouseMove(e: any): void {
-    if (this.isDrawing) {
+    if (this.isDrawing) { // if we're not drawing we need to ignore the events
       const coords = this.relativeCoords(e);
       this.context.lineTo(coords.x, coords.y);
       this.context.stroke();
